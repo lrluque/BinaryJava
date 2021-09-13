@@ -38,6 +38,7 @@ public class Binary extends JFrame implements ActionListener {
         this.add(reverseButton);
         this.add(textField);
         this.add(textField2);
+        textField2.setEditable(false);
         this.pack();
         this.setVisible(true);
         this.setTitle("Decimal to Binary");
@@ -45,15 +46,18 @@ public class Binary extends JFrame implements ActionListener {
     }
 
 
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == button1 && !reversed) {
-            String number = textField.getText();
-            int n = Integer.parseInt(number);
-            textField2.setText(Integer.toBinaryString(n));
-
+    public void actionPerformed(ActionEvent e) throws RuntimeException {
+        if (e.getSource() == button1 && !reversed) { //decimal-binario
+            try{
+                String number = textField.getText();
+                int n = Integer.parseInt(number);
+                textField2.setText(Integer.toBinaryString(n));
+            }catch(RuntimeException o){
+                textField2.setText(o.getMessage());
+            }
 
         }
-        if (e.getSource() == button1 && reversed) {
+        if (e.getSource() == button1 && reversed) { //binario-decimal
             String number = textField.getText();
             int num = Integer.parseInt(number, 2);
             textField2.setText(Integer.toString(num));
@@ -61,12 +65,11 @@ public class Binary extends JFrame implements ActionListener {
         }
 
         if (e.getSource() == reverseButton) {
-            reversed = true;
-            contador = contador + 1;
-            if (contador % 2 != 0) {
+            reversed = !reversed;
+            if (!reversed) {
                 this.setTitle("Decimal to Binary");
             }
-            if (contador % 2 == 0) {
+            else{
                 this.setTitle("Binary to Decimal");
             }
         }
