@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.*;
 
 
 public class Binary extends JFrame implements ActionListener {
@@ -11,12 +12,8 @@ public class Binary extends JFrame implements ActionListener {
     JTextField textField;
     JTextField textField2;
     boolean reversed = false;
-    int contador = 1;
 
     Binary() {
-
-
-
         this.setLayout(new FlowLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -46,20 +43,24 @@ public class Binary extends JFrame implements ActionListener {
     }
 
 
-    public void actionPerformed(ActionEvent e) throws RuntimeException {
+    public void actionPerformed(ActionEvent e) {
+        Pattern p = Pattern.compile(".*[^01]"); //si la string(.*)todos los char. contiene cualquier carácter que no sea 0 o 1
         if (e.getSource() == button1 && !reversed) { //decimal-binario
-            try{
-                String number = textField.getText();
-                int n = Integer.parseInt(number);
-                textField2.setText(Integer.toBinaryString(n));
-            }catch(RuntimeException o){
-                textField2.setText(o.getMessage());
-            }
+            String number = textField.getText();
+            int n = Integer.parseInt(number);
+            textField2.setText(Integer.toBinaryString(n));
 
-        }
+        } 
         if (e.getSource() == button1 && reversed) { //binario-decimal
             String number = textField.getText();
+            boolean isNotBinary = p.matcher(number).matches();
+            if (isNotBinary) {
+                textField2.setForeground(Color.RED);
+                textField2.setText("ERROR. NÚMERO NO BINARIO.");
+            }
             int num = Integer.parseInt(number, 2);
+            System.out.println(num);
+            textField2.setForeground(Color.BLACK);
             textField2.setText(Integer.toString(num));
 
         }
@@ -68,18 +69,19 @@ public class Binary extends JFrame implements ActionListener {
             reversed = !reversed;
             if (!reversed) {
                 this.setTitle("Decimal to Binary");
-            }
-            else{
+            } else {
                 this.setTitle("Binary to Decimal");
             }
         }
     }
-        public static void main (String[]args){
-            Binary frame = new Binary();
 
 
-        }
+    public static void main(String[] args) {
+        Binary frame = new Binary();
+
 
     }
+
+}
 
 
